@@ -1,0 +1,36 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+mywallet:
+  jwt:
+    secret: test-only-secret-not-used-for-real-security
+    access-token-ttl-seconds: 900
+    refresh-token-ttl-seconds: 604800
+  marketdata:
+    tick-interval-seconds: 5
+    tick-interval-ms: 5000
+  strategy-execution:
+    interval-ms: 5000
+  detection:
+    price-anomaly:
+      z-score-threshold: 4.0
+    behavior-anomaly:
+      interval-ms: 30000
+      anomaly-score-threshold: 0.65
+  demo:
+    enabled: false
+  ratelimit:
+    auth:
+      # Effectively disabled for tests: dozens of integration test classes each register
+      # at least one user via the same simulated client address, and InMemoryRateLimiter
+      # is a singleton bean shared across the whole (Spring-context-cached) test run -
+      # the production default (10/min) would make the test suite trip its own limiter.
+      # InMemoryRateLimiterTest already covers the actual limiting behavior in isolation.
+      max-requests: 100000
+      window-ms: 60000
