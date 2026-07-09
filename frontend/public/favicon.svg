@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="walletGrad" x1="4" y1="8" x2="60" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect x="6" y="12" width="52" height="40" rx="10" fill="#0E1017" stroke="url(#walletGrad)" stroke-width="2.5"/>
+  <path d="M14 12V10C14 7.79086 15.7909 6 18 6H46C48.2091 6 50 7.79086 50 10V12" stroke="url(#walletGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M38 24H54C56.2091 24 58 25.7909 58 28V36C58 38.2091 56.2091 40 54 40H38C35.7909 40 34 38.2091 34 36V28C34 25.7909 35.7909 24 38 24Z" fill="#141721" stroke="#38BDF8" stroke-width="2"/>
+  <circle cx="44" cy="32" r="3" fill="#38BDF8" filter="url(#glow)"/>
+  <path d="M16 28L22 34L26 30L30 34" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
