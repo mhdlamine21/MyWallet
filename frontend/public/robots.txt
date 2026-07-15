@@ -1,0 +1,7 @@
+# robots.txt for MyWallet Platform
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /ws/
+
+Sitemap: https://mywallet.dev/sitemap.xml
