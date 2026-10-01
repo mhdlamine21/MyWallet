@@ -1,0 +1,81 @@
+version: "3.9"
+
+# Lightweight profile for the public cloud demo (Railway / Render / Oracle Free Tier).
+# Trims resource usage: no Prometheus/Grafana here (use the provider's own metrics/logs),
+# reduced connection pools, and a scheduled reset job for demo data.
+#
+# Usage: docker compose -f docker-compose.prod-lite.yml up -d
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-mywallet}
+      POSTGRES_USER: ${POSTGRES_USER:-mywallet}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+    volumes:
+      - mywallet_postgres_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    deploy:
+      resources:
+        limits:
+          memory: 96M
+
+  rabbitmq:
+    image: rabbitmq:3.13-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-mywallet}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?RABBITMQ_PASSWORD must be set}
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+    environment:
+      SPRING_PROFILES_ACTIVE: demo
+      DB_HOST: postgres
+      DB_NAME: ${POSTGRES_DB:-mywallet}
+      DB_USER: ${POSTGRES_USER:-mywallet}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      REDIS_HOST: redis
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: ${RABBITMQ_USER:-mywallet}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
+      DEMO_MODE_ENABLED: "true"
+      DEMO_RESET_CRON: ${DEMO_RESET_CRON:-0 */6 * * *}
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 400M
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+    ports:
+      - "80:80"
+
+volumes:
+  mywallet_postgres_data:

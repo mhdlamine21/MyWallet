@@ -119,3 +119,20 @@ collections). Je note ici ce que j'ai fait, ce qui m'a bloqué et comment je m'e
 - **Bug** : les pages Confidentialité et Conditions n'étaient pas accessibles sans être
   connecté (bloquées par `ProtectedRoute`). Ajout d'un `PublicPageLayout` pour les rendre publiques.
 - Documentation : diagrammes, schéma de la base, README.
+
+## Octobre 2026: Docker et CI/CD
+
+En juillet, je lançais tout à la main : PostgreSQL, RabbitMQ et Redis installés sur ma
+machine, puis le backend et le front dans deux terminaux. Docker ne me servait qu'à
+Testcontainers. Pour quelqu'un qui clone le projet, c'était beaucoup trop d'étapes.
+
+- Dockerfile pour le backend (build Maven en plusieurs étapes) et pour le front (build Vite
+  puis Nginx pour servir les fichiers).
+- `docker-compose.yml` pour toute la stack : PostgreSQL, RabbitMQ, Redis, backend, frontend,
+  Prometheus et Grafana. Un seul `docker compose up --build` suffit maintenant.
+- **Problème** : le backend démarrait avant que PostgreSQL soit prêt et plantait. Il a fallu
+  ajouter des healthchecks et `depends_on` avec `condition: service_healthy`.
+- Pipeline GitHub Actions : à chaque push, les tests backend tournent (Testcontainers marche
+  directement sur les runners GitHub) et l'image Docker est construite. J'aurais dû faire ça
+  dès le début.
+- `docker-compose.prod-lite.yml` : une version plus légère pour un petit serveur.
