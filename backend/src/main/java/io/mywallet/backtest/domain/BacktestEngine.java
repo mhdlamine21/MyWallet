@@ -1,4 +1,4 @@
-﻿package io.mywallet.backtest.domain;
+package io.mywallet.backtest.domain;
 
 import io.mywallet.ruleengine.domain.ast.BooleanExpression;
 import io.mywallet.ruleengine.domain.evaluator.RuleEvaluator;

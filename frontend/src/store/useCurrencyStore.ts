@@ -1,4 +1,4 @@
-﻿/**
+/**
  * useCurrencyStore.ts - Gestion de la devise active (Zustand)
  *
  * Ce store gère la devise affichée dans toute l'application.

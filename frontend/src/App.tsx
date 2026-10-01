@@ -1,4 +1,4 @@
-﻿/**
+/**
  * App.tsx - Point d'entrée du routage React
  *
  * J'ai organisé les routes en 3 niveaux :

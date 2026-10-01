@@ -1,4 +1,4 @@
-﻿package io.mywallet.risk.domain.detection;
+package io.mywallet.risk.domain.detection;
 
 import java.util.ArrayList;
 import java.util.Collections;

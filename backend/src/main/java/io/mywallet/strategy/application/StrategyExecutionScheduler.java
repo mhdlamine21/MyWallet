@@ -1,4 +1,4 @@
-﻿package io.mywallet.strategy.application;
+package io.mywallet.strategy.application;
 
 import io.mywallet.asset.infrastructure.persistence.AssetEntity;
 import io.mywallet.asset.infrastructure.persistence.AssetJpaRepository;
